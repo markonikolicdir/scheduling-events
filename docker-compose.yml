@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+  web:
+    container_name: scheduling-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: scheduling:img
+    ports:
+    - "6080:80"
+    volumes:
+    - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      APACHE_LOG_DIR: /var/log/scheduling-log
+
+  db:
+    container_name: scheduling-mysql
+    image: mysql:5.7.29
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: scheduling
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpass
+    ports:
+    - 6033:3306
+
+  adminer:
+    container_name: scheduling-dbadmin
+    image: adminer
+    restart: always
+    ports:
+    - 8080:8080
