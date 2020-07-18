@@ -23,7 +23,8 @@ security:
                 authenticators:
                     - App\Security\JwtAuthenticator
             logout:
-                path: app_logout
+                path:   /logout
+                target: /
                 # where to redirect after logout
                 # target: app_any_route
 

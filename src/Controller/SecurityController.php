@@ -59,5 +59,18 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/auth", name="auth", methods={"GET"})
+     */
+    public function auth()
+    {
+        return $this->render('security/auth.html.twig');
+    }
 
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction() {
+
+    }
 }
