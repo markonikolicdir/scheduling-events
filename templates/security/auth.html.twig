@@ -27,12 +27,12 @@
                     url: form.attr("action"),
                     data: form.serialize(), // serializes the form's elements.
                     success: function(data) {
-                        alert('Marko');
-                        console.log(data); // show response from the php script. (use the developer toolbar console, firefox firebug or chrome inspector console)
+                        // alert('Marko');
+                        // console.log(data); // show response from the php script. (use the developer toolbar console, firefox firebug or chrome inspector console)
                         localStorage.setItem('token',data.token);
 
                         var settings = {
-                            "url": "http://127.0.0.1:8000/api/event",
+                            "url": {{ path('event_index') }},
                             "method": "GET",
                             "timeout": 0,
                             "headers": {
@@ -49,5 +49,4 @@
         });
 
     </script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 {% endblock %}
