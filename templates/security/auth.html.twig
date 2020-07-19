@@ -3,16 +3,16 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form id="authForm" action="{{ path('login') }}">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername">Username</label>
-    <input type="text" name="username" id="inputUsername" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+    <form id="authForm" action="{{ path('login') }}">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputUsername">Username</label>
+        <input type="text" name="username" id="inputUsername" class="form-control" required autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" required>
+        <button class="btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    </form>
 {% endblock %}
 
 {% block javascripts %}
@@ -28,11 +28,11 @@
                     data: form.serialize(), // serializes the form's elements.
                     success: function(data) {
                         // alert('Marko');
-                        // console.log(data); // show response from the php script. (use the developer toolbar console, firefox firebug or chrome inspector console)
+                        // console.log(data); // show response from the php script. (use the developer toolbar console, firefox firebug or chrome inspector console)?
                         localStorage.setItem('token',data.token);
 
                         var settings = {
-                            "url": {{ path('event_index') }},
+                            "url": "{{ path('event_index') }}",
                             "method": "GET",
                             "timeout": 0,
                             "headers": {
@@ -49,4 +49,5 @@
         });
 
     </script>
+    {#<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>#}
 {% endblock %}
