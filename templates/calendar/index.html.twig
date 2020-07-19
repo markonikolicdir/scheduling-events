@@ -28,8 +28,19 @@
                 selectable: true,
                 selectMirror: true,
                 select: function(arg) {
-                    var title = prompt('Event Title:');
+                    var title = prompt('Event Description:');
+                    var date = $.datepicker.formatDate('yy-mm-dd', new Date(arg.start));
+
                     if (title) {
+                        $.ajax({
+                            url: "{{ path('calendar_new') }}",
+                            data: 'description=' + title + '&date=' + date,
+                            type: "POST",
+                            success: function (data) {
+                                alert("Added Successfully");
+                            }
+                        });
+
                         calendar.addEvent({
                             title: title,
                             start: arg.start,
