@@ -49,7 +49,7 @@ class SecurityController extends AbstractController
         }
         $payload = [
             "user" => $user->getUsername(),
-            "exp"  => (new \DateTime())->modify("+1 minutes")->getTimestamp(),
+            "exp"  => (new \DateTime())->modify("+100 minutes")->getTimestamp(),
         ];
 
         $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'), 'HS256');

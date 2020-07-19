@@ -5,8 +5,11 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
+ * @UniqueEntity("date", message="There should be only one event per day.")
  */
 class Event
 {
@@ -18,7 +21,7 @@ class Event
     private $id;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", unique=true)
      */
     private $date;
 

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("username")
+ * @UniqueEntity("username", message="Username has to be unique.")
  */
 class User implements UserInterface
 {
