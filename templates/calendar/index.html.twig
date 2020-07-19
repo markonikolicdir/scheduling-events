@@ -24,11 +24,11 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 initialDate: today,
-                navLinks: true, // can click day/week names to navigate views
+                navLinks: false, // can click day/week names to navigate views
                 selectable: true,
                 selectMirror: true,
                 select: function(arg) {
-                    var title = prompt('Event Titleeee:');
+                    var title = prompt('Event Title:');
                     if (title) {
                         calendar.addEvent({
                             title: title,
