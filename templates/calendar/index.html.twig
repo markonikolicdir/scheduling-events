@@ -7,8 +7,6 @@
 
 {% block body %}
 
-    {{ dump(events) }}
-
     <div id='calendar'></div>
 
     <script>
@@ -17,6 +15,7 @@
             var calendarEl = document.getElementById('calendar');
 
             var today = $.datepicker.formatDate('yy-mm-dd', new Date());
+            var events = JSON.parse('{{ events|raw}}');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
@@ -47,7 +46,7 @@
                 },
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
-                events: [{"title":"Alo brate","start":"2020-07-10"},{"title":"buhaha 2","start":"2020-07-18"},{"title":"opis 1","start":"2020-07-19"}]
+                events: events
             });
 
             calendar.render();
