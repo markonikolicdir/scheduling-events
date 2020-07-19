@@ -47,4 +47,17 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @return Event[] Returns an array of Event objects
+     */
+
+    public function eventsForCalendar()
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.date', 'ASC')
+            ->select('e.date', 'e.description')
+            ->getQuery()
+            ->getResult();
+    }
 }
