@@ -24,6 +24,7 @@ class CalendarController extends AbstractController
         $events = [];
         foreach ($eventRepository->eventsForCalendar() as $event){
             $temp = [];
+            $temp['id'] = $event['id'];
             $temp['title'] = $event['description'];
             $temp['start'] = $event['date']->format('Y-m-d');
 
@@ -63,5 +64,20 @@ class CalendarController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['status'=>JsonResponse::HTTP_CREATED]);
+    }
+
+    /**
+     * @Route("/{id}", name="calendar_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, Event $event): Response
+    {
+//        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($event);
+            $entityManager->flush();
+//        }
+
+        return new JsonResponse(['status'=>JsonResponse::HTTP_NO_CONTENT]);
+//        return $this->redirectToRoute('event_index');
     }
 }
