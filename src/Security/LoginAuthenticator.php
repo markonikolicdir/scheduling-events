@@ -111,9 +111,8 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         // the $useHttps variable to false
         $useHttps = true;
         setcookie("jwt", $jwt, $expireTime, "/", "", $useHttps, true);
-        return new JsonResponse([
-            'result' => true
-        ]);
+
+        return new RedirectResponse($this->urlGenerator->generate('calendar_index'));
     }
 
     protected function getLoginUrl()
