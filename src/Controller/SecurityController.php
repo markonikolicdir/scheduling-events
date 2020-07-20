@@ -7,31 +7,46 @@ use App\Repository\UserRepository;
 use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class SecurityController extends AbstractController
 {
 
     /**
-     * @Route("/register", name="register", methods={"POST"})
+     * @Route("/register", name="register", methods={"GET","POST"})
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encoder)
+    public function register(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator) : Response
     {
-        $username = $request->get('username');
-        $password = $request->get('password');
+        $message = [];
+        $method = $request->getMethod();
 
-        $user = new User();
-        $user->setUsername($username);
-        $user->setPassword($encoder->encodePassword($user, $password));
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+        if ($method == 'POST') {
+            $username = $request->get('username');
+            $password = $request->get('password');
 
-        return $this->json([
-            'name' => $user->getUsername()
-        ]);
+            $user = new User();
+            $user->setUsername($username);
+            $user->setPassword($password);
+
+            $errors = $validator->validate($user);
+
+            if (count($errors) > 0) {
+                foreach ($errors as $violation) {
+                    $message[] = $violation->getMessage();
+                }
+            } else {
+                $user->setPassword($encoder->encodePassword($user, $password));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+
+        return $this->render('security/auth_register.html.twig', ['errors' => $message]);
     }
 
     /**
@@ -61,11 +76,11 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/auth", name="auth", methods={"GET"})
+     * @Route("/", name="auth_login", methods={"GET"})
      */
-    public function auth()
+    public function authLogin()
     {
-        return $this->render('security/auth.html.twig');
+        return $this->render('security/auth_login.html.twig');
     }
 
     /**
