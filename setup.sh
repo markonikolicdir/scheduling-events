@@ -5,3 +5,5 @@
 ./bin/console doctrine:migrations:migrate
 
 chmod 777 -R /var/www/html/var/log
+./bin/console cache:clear
+./bin/console cache:clear --env=prod

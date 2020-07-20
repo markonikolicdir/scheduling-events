@@ -42,6 +42,7 @@
 
                         $.ajax(settings).done(function (response) {
                             console.log(response);
+                            {#window.location.replace({{ path('calendar_index') }});#}
                         });
                     }
                 });
