@@ -67,17 +67,27 @@ class CalendarController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/edit", name="calendar_edit", methods={"POST"})
+     */
+    public function edit(Request $request, Event $event): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $event->setDescription($request->request->get('description'));
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        return new JsonResponse(['status'=>JsonResponse::HTTP_CREATED]);
+    }
+
+    /**
      * @Route("/{id}", name="calendar_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Event $event): Response
     {
-//        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($event);
-            $entityManager->flush();
-//        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($event);
+        $entityManager->flush();
 
         return new JsonResponse(['status'=>JsonResponse::HTTP_NO_CONTENT]);
-//        return $this->redirectToRoute('event_index');
     }
 }
