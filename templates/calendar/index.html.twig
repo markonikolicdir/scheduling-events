@@ -40,6 +40,9 @@
                             url: "{{ path('calendar_new') }}",
                             data: 'description=' + title + '&date=' + date,
                             type: "POST",
+                            "headers": {
+                                "Authorization": localStorage.getItem('token')
+                            },
                             success: function (data) {
                                 console.log("Added Successfully");
                             }
@@ -63,6 +66,9 @@
                         $.ajax({
                             url: url,
                             type: "DELETE",
+                            "headers": {
+                                "Authorization": localStorage.getItem('token')
+                            },
                             success: function () {
                                 console.log("Deleted Successfully");
                             }

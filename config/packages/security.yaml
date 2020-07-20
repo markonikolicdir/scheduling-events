@@ -18,12 +18,16 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
-            pattern: ^/api
+#            pattern: ^/api
             guard:
                 authenticators:
-                    - App\Security\JwtAuthenticator
+                - App\Security\LoginAuthenticator
+                - App\Security\JwtAuthenticator
+                entry_point: App\Security\LoginAuthenticator
             logout:
                 path: logout
+                success_handler: App\Security\JwtLogoutHandler
+            stateless: true
                 # where to redirect after logout
                 # target: app_any_route
 

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
@@ -36,37 +37,51 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-//        var_dump($request->headers->has('Authorization'));
+        $return = $request->cookies->get("jwt") ? true : false;
 
-        return $request->headers->has('Authorization');
+        return $return;
     }
 
     public function getCredentials(Request $request)
     {
-        return $request->headers->get('Authorization');
+        $cookie = $request->cookies->get("jwt");
+
+        // Default error message
+        $error = "Unable to validate session.";
+        try
+        {
+            $decodedJwt = JWT::decode($cookie, $this->params->get('jwt_secret'), ['HS256']);
+            return [
+                'user_id' => $decodedJwt->user_id,
+                'username' => $decodedJwt->username
+            ];
+        }
+        catch(ExpiredException $e)
+        {
+            $error = "Session has expired.";
+        }
+        catch(SignatureInvalidException $e)
+        {
+            // In this case, you may also want to send an email to yourself with the JWT
+            // If someone uses a JWT with an invalid signature, it could
+            // be a hacking attempt.
+            $error = "Attempting access invalid session.";
+        }
+        catch(\Exception $e)
+        {
+            // Use the default error message
+        }
+        throw new CustomUserMessageAuthenticationException($error);
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        try {
-            $credentials = str_replace('Bearer ', '', $credentials);
-            $jwt = (array) JWT::decode(
-                $credentials,
-                $this->params->get('jwt_secret'),
-                ['HS256']
-            );
-            return $this->em->getRepository(User::class)
-                ->findOneBy([
-                    'username' => $jwt['user'],
-                ]);
-        }catch (\Exception $exception) {
-            throw new AuthenticationException($exception->getMessage());
-        }
+        return $userProvider->loadUserByUsername($credentials['username']);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return true;
+        return $user->getId() === $credentials['user_id'];
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
