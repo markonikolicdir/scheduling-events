@@ -1,11 +1,20 @@
-# scheduling-web-app
+# Scheduling events application
 
-# Symfony 5
-# Docker
++ Symfony 5
++ Docker
 
+Register page 
+Login page with JWT token
+Events table(crud)
+Events Calendar(JS) with CRUD api
 
-docker-compose -d build
-container_name: scheduling-app
-docker exec -it scheduling-app bash
-install composer (Install manualy composer)
-RUN ./setup.sh manyally
+# Setup app environment with Docker
+
++ install composer and docker (manually on local machine)
++ RUN composer install
+
+# Create Docker Containers
++ docker-compose -d build
+# Exec in container "scheduling-app"
++ docker exec -it scheduling-app bash
++ RUN ./setup.sh manually
