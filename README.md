@@ -2,10 +2,11 @@
 
 + Symfony 5
 + Docker
++ FullCalendar
 
-Register page 
-Login page with JWT token
-Events table(crud)
+Register page, 
+Login page with JWT token,
+Events table(crud),
 Events Calendar(JS) with CRUD api
 
 # Setup app environment with Docker
